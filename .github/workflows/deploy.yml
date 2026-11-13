@@ -16,4 +16,17 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /opt/kingfishsolutions/kpitrackmate/kpitrackmate-platform
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Activate virtual environment and update dependencies
+            source /opt/kingfishsolutions/streamlitapp/venv/bin/activate
+            pip install -r requirements.txt
+
+            # Apply any new Django database migrations & static files
+            python manage.py migrate --noinput
+            python manage.py collectstatic --noinput
+
+            # Restart your live services (replace with your exact service names)
+            sudo systemctl restart gunicorn
+            sudo systemctl restart streamlit
