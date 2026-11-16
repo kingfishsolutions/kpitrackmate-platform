@@ -29,5 +29,5 @@ jobs:
             python manage.py collectstatic --noinput
 
             # Restart your live services (replace with your exact service names)
-            sudo systemctl restart gunicorn
-            sudo systemctl restart streamlit
+            sudo -A systemctl restart gunicorn
+            sudo -A systemctl restart streamlit
