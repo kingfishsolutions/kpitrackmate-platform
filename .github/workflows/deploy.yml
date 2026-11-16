@@ -21,6 +21,7 @@ jobs:
 
             # Activate virtual environment and update dependencies
             source /opt/kingfishsolutions/kpitrackmate/venv/bin/activate
+            cd django_app 
             pip install -r requirements.txt
 
             # Apply any new Django database migrations & static files
