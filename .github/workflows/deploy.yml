@@ -20,7 +20,7 @@ jobs:
             git reset --hard origin/main
 
             # Activate virtual environment and update dependencies
-            source /opt/kingfishsolutions/streamlitapp/venv/bin/activate
+            source /opt/kingfishsolutions/kpitrackmate/venv/bin/activate
             pip install -r requirements.txt
 
             # Apply any new Django database migrations & static files
