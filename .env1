@@ -1,0 +1,23 @@
+# Django Core Settings
+DEBUG=False
+DJANGO_SECRET_KEY=django-insecure-your-super-secret-key-change-this-in-production
+DJANGO_ALLOWED_HOSTS=yourdomain.com,://yourdomain.com,138.68.x.x
+
+# Database Configuration (PostgreSQL)
+# Option A: Using individual variables (common for custom Droplet/Docker setups)
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=kpitrackmate_db
+SQL_USER=your_db_user
+SQL_PASSWORD=your_db_password
+SQL_HOST=localhost
+SQL_PORT=5432
+
+# Option B: Using a single DATABASE_URL (common for App Platform or dj-database-url)
+# Format: postgres://USER:PASSWORD@HOST:PORT/NAME
+DATABASE_URL=postgres://your_db_user:your_db_password@localhost:5432/your_db_name
+
+# Optional: DigitalOcean Spaces (S3-compatible storage for static/media files)
+# AWS_ACCESS_KEY_ID=your_spaces_access_key
+# AWS_SECRET_ACCESS_KEY=your_spaces_secret_key
+# AWS_STORAGE_BUCKET_NAME=your_space_name
+# AWS_S3_ENDPOINT_URL=https://nyc3.digitaloceanspaces.com

@@ -1,0 +1,74 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: kpi_postgres
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  django:
+    build:
+      context: ./django_app
+    container_name: kpi_django
+    restart: unless-stopped
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    volumes:
+      - ./django_app:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/mediafiles
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  streamlit:
+    build:
+      context: ./streamlit_app
+    container_name: kpi_streamlit
+    restart: unless-stopped
+    command: >
+      streamlit run app.py
+      --server.port=8501
+      --server.address=0.0.0.0
+      --server.baseUrlPath=dashboard
+      --server.enableCORS=false
+      --server.enableXsrfProtection=false
+    volumes:
+      - ./streamlit_app:/app
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      django:
+        condition: service_started
+
+  nginx:
+    image: nginx:alpine
+    container_name: kpi_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      # - "443:443" # Uncomment once SSL certificates are configured
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/app/staticfiles:ro
+      - media_volume:/app/mediafiles:ro
+    depends_on:
+      - django
+      - streamlit
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

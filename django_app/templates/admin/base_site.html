@@ -1,0 +1,48 @@
+{% extends "admin/base.html" %}
+{% load static %}
+<img src="{% static 'images/logo.png' %}" alt="KPI TrackMate Logo">
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Custom Admin{% endblock %}
+
+
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  /* Custom banner styling */
+  .custom-admin-banner {
+    background-color: #d9534f; /* Red alert color; change to #2b5b84 for blue or #28a745 for green */
+    color: #ffffff;
+    text-align: center;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Optional: Change the main top header bar background color */
+  #header {
+    background: #1b365d;
+    color: #ffffff;
+  }
+</style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }}{% endblock %}
+
+{% block nav-global %}
+<div class="custom-admin-banner">
+  ENVIRONMENT NOTICE: You are currently working in the Custom Admin Portal
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        <img src="{% static 'images/logo.jpg' %}" alt="KPI TrackMate Logo" style="height: 40px; width: auto;">
+        <span>Administration</span>
+    </a>
+</div>
+{% endblock %}
+
